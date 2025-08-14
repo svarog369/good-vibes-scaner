@@ -1,1 +1,62 @@
-*dist-*
+# Haskell Build Artifacts (keeping those build vibes clean) 🧹
+dist-*
+cabal-dev
+*.o
+*.hi
+*.chi
+*.chs.h
+*.dyn_o
+*.dyn_hi
+.hpc
+.hsenv
+.cabal-sandbox/
+cabal.sandbox.config
+*.prof
+*.aux
+*.hp
+*.eventlog
+.stack-work/
+cabal.project.local
+cabal.project.local~
+.HTF/
+.ghc.environment.*
+
+# IDE Files (keeping those editor vibes organized) 💻
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Generated Files (keeping those system vibes clean) 🖥️
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary Files (those temp vibes gotta go) 🗑️
+*.tmp
+*.temp
+*.log
+*.cache
+
+# Testing Artifacts (keeping those test vibes tidy) 🧪
+.hspec-failures
+test-results/
+coverage/
+
+# Documentation Build (keeping those doc vibes clean) 📚
+docs/_build/
+.doctrees/
+
+# Local Configuration (keeping those config vibes personal) ⚙️
+.env
+.env.local
+config.local.*
+
+# Binary Output (keeping those executable vibes separate) ⚡
+good-vibes-scaner
+good-vibes-scaner.exe

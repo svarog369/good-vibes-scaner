@@ -1,0 +1,182 @@
+name: 🚀 Release Good Vibes
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+env:
+  CABAL_VERSION: "3.10"
+  BINARY_NAME: "good-vibes-scaner"
+
+jobs:
+  create-release:
+    name: 🎯 Create Release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🏷️ Get tag name
+      id: tag
+      run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      
+    - name: 🎉 Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.tag.outputs.tag }}
+        release_name: Good Vibes Scaner ${{ steps.tag.outputs.tag }} ✨
+        body: |
+          ## 🌟 What's New in This Vibe?
+          
+          Another release packed with good vibes and security improvements! 🚀
+          
+          ### ✨ Highlights
+          - Bug fixes and performance improvements
+          - Enhanced secret detection patterns
+          - Better false positive filtering
+          - Maintained those good vibes! 💫
+          
+          ### 📦 Installation
+          Download the binary for your platform below, or install via cabal:
+          ```bash
+          cabal install good-vibes-scaner
+          ```
+          
+          ### 🔍 Quick Start
+          ```bash
+          # Scan current directory with good vibes
+          ./good-vibes-scaner --current-only
+          ```
+          
+          ---
+          *Built with 💖 and Haskell magic*
+        draft: false
+        prerelease: false
+
+  build-binaries:
+    name: 🏗️ Build ${{ matrix.os }} Binary
+    needs: create-release
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset-name: good-vibes-scaner-linux-x86_64
+            ghc-version: '9.6.3'
+          - os: macos-latest
+            asset-name: good-vibes-scaner-macos-x86_64
+            ghc-version: '9.6.3'
+          - os: windows-latest
+            asset-name: good-vibes-scaner-windows-x86_64.exe
+            ghc-version: '9.6.3'
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🏗️ Setup Haskell
+      uses: haskell-actions/setup@v2
+      with:
+        ghc-version: ${{ matrix.ghc-version }}
+        cabal-version: ${{ env.CABAL_VERSION }}
+        
+    - name: 📦 Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cabal/packages
+          ~/.cabal/store
+          dist-newstyle
+        key: ${{ runner.os }}-ghc-${{ matrix.ghc-version }}-cabal-${{ env.CABAL_VERSION }}-release-${{ hashFiles('**/*.cabal') }}
+        
+    - name: 🔄 Update package index
+      run: cabal update
+      
+    - name: 🏗️ Build release binary
+      run: |
+        cabal configure --enable-optimization=2 --enable-executable-stripping
+        cabal build exe:good-vibes-scaner
+        
+    - name: 📋 Locate binary (Linux/macOS)
+      if: runner.os != 'Windows'
+      run: |
+        BINARY_PATH=$(find dist-newstyle -name "${{ env.BINARY_NAME }}" -type f -executable | head -1)
+        echo "BINARY_PATH=$BINARY_PATH" >> $GITHUB_ENV
+        cp "$BINARY_PATH" "${{ matrix.asset-name }}"
+        
+    - name: 📋 Locate binary (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        $BINARY_PATH = Get-ChildItem -Path "dist-newstyle" -Name "${{ env.BINARY_NAME }}.exe" -Recurse | Select-Object -First 1
+        $FULL_PATH = Join-Path "dist-newstyle" $BINARY_PATH.Name
+        echo "BINARY_PATH=$FULL_PATH" | Out-File -Append $env:GITHUB_ENV
+        Copy-Item $FULL_PATH "${{ matrix.asset-name }}"
+      shell: powershell
+      
+    - name: 🧪 Test binary
+      run: |
+        ./${{ matrix.asset-name }} --help
+        
+    - name: 📦 Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./${{ matrix.asset-name }}
+        asset_name: ${{ matrix.asset-name }}
+        asset_content_type: application/octet-stream
+
+  publish-hackage:
+    name: 📚 Publish to Hackage
+    needs: [create-release, build-binaries]
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'yourusername' # Replace with actual username
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🏗️ Setup Haskell
+      uses: haskell-actions/setup@v2
+      with:
+        ghc-version: '9.6.3'
+        cabal-version: ${{ env.CABAL_VERSION }}
+        
+    - name: 🔄 Update package index
+      run: cabal update
+      
+    - name: 📦 Build and check package
+      run: |
+        cabal build
+        cabal check
+        cabal sdist
+        
+    - name: 🚀 Upload to Hackage (candidate)
+      run: |
+        cabal upload --publish dist-newstyle/sdist/good-vibes-scaner-*.tar.gz
+      env:
+        HACKAGE_USERNAME: ${{ secrets.HACKAGE_USERNAME }}
+        HACKAGE_PASSWORD: ${{ secrets.HACKAGE_PASSWORD }}
+      continue-on-error: true # Don't fail if Hackage upload fails
+      
+  notify-success:
+    name: 🎉 Spread the Good Vibes
+    needs: [create-release, build-binaries]
+    runs-on: ubuntu-latest
+    if: success()
+    
+    steps:
+    - name: 🎊 Success notification
+      run: |
+        echo "🎉 Release completed successfully!"
+        echo "✨ Good vibes have been spread across all platforms!"
+        echo "🚀 Binaries are available for download"
+        echo "💫 The secret-scanning vibes continue!"

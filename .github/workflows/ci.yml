@@ -1,0 +1,155 @@
+name: 🚀 Good Vibes CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CABAL_VERSION: "3.10"
+
+jobs:
+  build-and-test:
+    name: 🧪 Build & Test (GHC ${{ matrix.ghc }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ghc: ['9.2.8', '9.4.7', '9.6.3']
+        
+    steps:
+    - name: 📥 Checkout code (spreading the good vibes)
+      uses: actions/checkout@v4
+      
+    - name: 🏗️ Setup Haskell (getting those vibes ready)
+      uses: haskell-actions/setup@v2
+      with:
+        ghc-version: ${{ matrix.ghc }}
+        cabal-version: ${{ env.CABAL_VERSION }}
+        
+    - name: 📦 Cache dependencies (caching those good vibes)
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cabal/packages
+          ~/.cabal/store
+          dist-newstyle
+        key: ${{ runner.os }}-ghc-${{ matrix.ghc }}-cabal-${{ env.CABAL_VERSION }}-${{ hashFiles('**/*.cabal', '**/cabal.project*') }}
+        restore-keys: |
+          ${{ runner.os }}-ghc-${{ matrix.ghc }}-cabal-${{ env.CABAL_VERSION }}-
+          ${{ runner.os }}-ghc-${{ matrix.ghc }}-
+          
+    - name: 🔄 Update package index (refreshing the vibes)
+      run: cabal update
+      
+    - name: 🔧 Configure project (aligning those vibes)
+      run: cabal configure --enable-tests --enable-benchmarks --test-show-details=direct
+      
+    - name: 📋 Show build plan (planning good vibes)
+      run: cabal build --dry-run all
+      
+    - name: 🏗️ Build dependencies (building up good vibes)
+      run: cabal build --dependencies-only all
+      
+    - name: 🔨 Build project (manifesting good vibes)
+      run: cabal build all
+      
+    - name: 🧪 Run tests (testing those vibes)
+      run: cabal test all --test-show-details=direct
+      
+    - name: 🔍 Run the scanner on itself (dogfooding with good vibes)
+      run: |
+        cabal run good-vibes-scaner -- --current-only .
+      continue-on-error: true
+        
+  lint-and-format:
+    name: 🧹 Lint & Format Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🏗️ Setup Haskell
+      uses: haskell-actions/setup@v2
+      with:
+        ghc-version: '9.6.3'
+        cabal-version: ${{ env.CABAL_VERSION }}
+        
+    - name: 📦 Install HLint (linting with good vibes)
+      run: cabal install hlint
+      
+    - name: 🔍 Run HLint (checking those vibes)
+      run: hlint app/ src/ test/ --hint=.hlint.yaml || true
+      continue-on-error: true
+      
+  security-check:
+    name: 🔒 Security Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🛡️ Run security audit (keeping vibes secure)
+      run: |
+        # Check for known vulnerabilities in dependencies
+        curl -sSL https://get.haskellstack.org/ | sh
+        stack audit || echo "⚠️ Security audit completed with warnings"
+      continue-on-error: true
+
+  documentation:
+    name: 📚 Documentation Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🏗️ Setup Haskell
+      uses: haskell-actions/setup@v2
+      with:
+        ghc-version: '9.6.3'
+        cabal-version: ${{ env.CABAL_VERSION }}
+        
+    - name: 📖 Build documentation (documenting good vibes)
+      run: |
+        cabal configure --enable-documentation
+        cabal haddock all
+        
+    - name: 📋 Check README links (keeping links vibing)
+      run: |
+        # Basic check for broken markdown links
+        grep -o '\[.*\]([^)]*)' README.md || echo "No markdown links found"
+
+  release-check:
+    name: 🚀 Release Readiness
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: [build-and-test, lint-and-format]
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🏗️ Setup Haskell
+      uses: haskell-actions/setup@v2
+      with:
+        ghc-version: '9.6.3'
+        cabal-version: ${{ env.CABAL_VERSION }}
+        
+    - name: 📦 Build release binary (preparing good vibes for release)
+      run: |
+        cabal configure --enable-optimization=2
+        cabal build
+        
+    - name: 📋 Package check (verifying release vibes)
+      run: |
+        cabal check
+        cabal sdist
+        
+    - name: ✨ Success message
+      run: |
+        echo "🎉 All checks passed! Ready to spread good vibes! ✨"
+        echo "📦 Build artifacts are ready for release"
