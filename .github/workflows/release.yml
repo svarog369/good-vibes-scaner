@@ -48,10 +48,12 @@ jobs:
           - Maintained those good vibes! 💫
           
           ### 📦 Installation
-          Download the binary for your platform below, or install via cabal:
+          Download the Linux binary below, or install via cabal:
           ```bash
           cabal install good-vibes-scaner
           ```
+          
+          **Note**: Linux binary only for now. macOS and Windows support coming soon!
           
           ### 🔍 Quick Start
           ```bash
@@ -74,12 +76,14 @@ jobs:
           - os: ubuntu-latest
             asset-name: good-vibes-scaner-linux-x86_64
             ghc-version: '9.6.3'
-          - os: macos-latest
-            asset-name: good-vibes-scaner-macos-x86_64
-            ghc-version: '9.6.3'
-          - os: windows-latest
-            asset-name: good-vibes-scaner-windows-x86_64.exe
-            ghc-version: '9.6.3'
+          # TODO: Fix macOS build issues and re-enable
+          # - os: macos-latest
+          #   asset-name: good-vibes-scaner-macos-x86_64  
+          #   ghc-version: '9.6.3'
+          # TODO: Fix Windows build issues and re-enable  
+          # - os: windows-latest
+          #   asset-name: good-vibes-scaner-windows-x86_64.exe
+          #   ghc-version: '9.6.3'
     
     steps:
     - name: 📥 Checkout code
