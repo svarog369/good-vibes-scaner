@@ -136,6 +136,7 @@ cabal test --test-options="--match=\"Pattern matching\""
 - GHC 9.2.8+ (but 9.4.7 and 9.6.3 have the best vibes)
 - Cabal 3.0+
 - Git (for the good git vibes)
+- HLint (for code quality vibes): `cabal install hlint`
 
 ### Building from Source
 
@@ -153,6 +154,12 @@ cabal build
 
 # Run tests to keep vibes high
 cabal test
+
+# Install HLint for development (optional but recommended)
+cabal install hlint
+
+# Run HLint to keep code quality vibes high
+hlint . --hint=.hlint.yaml
 ```
 
 ### Project Structure (Organized Vibes)
