@@ -96,16 +96,16 @@ jobs:
         ghc-version: '9.6.3'
         cabal-version: ${{ env.CABAL_VERSION }}
       
-    - name: 🛡️ Install cabal-audit (security vibes tool)
+    - name: 🛡️ Install modern cabal-audit (security vibes tool)
       run: |
-        cabal update
-        cabal install cabal-audit --install-method=copy --installdir=$HOME/.local/bin
-        export PATH="$HOME/.local/bin:$PATH"
-        echo "$HOME/.local/bin" >> $GITHUB_PATH
+        # Download the latest static executable
+        curl -L -o cabal-audit https://github.com/MangoIV/cabal-audit/releases/download/nightly/cabal-audit-x86_64-linux
+        chmod +x cabal-audit
+        sudo mv cabal-audit /usr/local/bin/
       
     - name: 🔍 Run security audit (keeping vibes secure)
       run: |
-        cabal-audit --json || {
+        cabal-audit --json --fail-on-warning || {
           echo "⚠️ Security vulnerabilities found - check the advisory database"
           exit 1
         }
