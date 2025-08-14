@@ -29,7 +29,7 @@ module GoodVibes.Patterns
 
 import GoodVibes.Types
 import Data.List (isInfixOf, isPrefixOf)
-import Data.Char (isAlphaNum, isDigit, toLower)
+import Data.Char (isAlphaNum, isDigit, toLower, isAsciiLower, isAsciiUpper)
 import Text.Regex.TDFA ((=~))
 
 -- | Classify a string as a potential secret type
@@ -48,7 +48,7 @@ classifySecret text
 -- Designed to catch real API keys while keeping code identifiers chill! 🔑
 isAPIKeyPattern :: String -> Bool
 isAPIKeyPattern text = 
-  any (\prefix -> prefix `isPrefixOf` text) apiKeyPrefixes &&
+  any (`isPrefixOf` text) apiKeyPrefixes &&
   length (filter isAlphaNum text) >= 20 &&
   not (isCamelCase text) &&
   not (isLikelyCodeIdentifier text)
@@ -75,8 +75,8 @@ isHighEntropySecret text =
   where
     hasGoodEntropy s = 
       let digitCount = length $ filter isDigit s
-          lowerCount = length $ filter (\c -> c >= 'a' && c <= 'z') s
-          upperCount = length $ filter (\c -> c >= 'A' && c <= 'Z') s
+          lowerCount = length $ filter isAsciiLower s
+          upperCount = length $ filter isAsciiUpper s
           hasDigits = digitCount > 0
           hasLowers = lowerCount > 0
           hasUppers = upperCount > 0
@@ -93,16 +93,16 @@ isCamelCase text =
   not (hasConsecutiveUppercase text) &&
   hasReasonableWordBoundaries text
   where
-    startsWithUpper (c:_) = c >= 'A' && c <= 'Z'
+    startsWithUpper (c:_) = isAsciiUpper c
     startsWithUpper [] = False
     
-    hasMultipleCapitalLetters s = length (filter (\c -> c >= 'A' && c <= 'Z') s) >= 2
+    hasMultipleCapitalLetters s = length (filter isAsciiUpper s) >= 2
     
     hasConsecutiveUppercase s = any isConsecutiveUpper (zip s (tail s))
-    isConsecutiveUpper (c1, c2) = (c1 >= 'A' && c1 <= 'Z') && (c2 >= 'A' && c2 <= 'Z')
+    isConsecutiveUpper (c1, c2) = isAsciiUpper c1 && isAsciiUpper c2
     
     hasReasonableWordBoundaries s = 
-      let upperPositions = [i | (i, c) <- zip [0..] s, c >= 'A' && c <= 'Z']
+      let upperPositions = [i | (i, c) <- zip [0..] s, isAsciiUpper c]
           avgDistance = if length upperPositions > 1 
                        then fromIntegral (last upperPositions - head upperPositions) / fromIntegral (length upperPositions - 1)
                        else 0
@@ -117,7 +117,7 @@ isLikelyCodeIdentifier text =
   isAllUpperWithUnderscores text
   where
     isSnakeCase s = "_" `isInfixOf` s && all (\c -> isAlphaNum c || c == '_') s
-    isAllUpperWithUnderscores s = all (\c -> (c >= 'A' && c <= 'Z') || c == '_' || isDigit c) s
+    isAllUpperWithUnderscores s = all (\c -> isAsciiUpper c || c == '_' || isDigit c) s
     hasCommonCodePatterns s = any (`isInfixOf` map toLower s) commonCodeWords
     commonCodeWords = ["test", "mock", "handler", "service", "client", "server", "config", "util", "helper", "manager", "controller", "processor", "validator", "builder", "factory", "pipeline", "workflow", "template", "model", "entity", "dto", "request", "response", "exception", "error", "logger", "cache", "database", "repository", "interface", "abstract", "implementation", "adapter"]
 

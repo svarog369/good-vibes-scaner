@@ -8,6 +8,7 @@ import Test.Hspec
 import Test.QuickCheck
 import Data.List (isInfixOf, isPrefixOf)
 import Data.Char (isAlphaNum, isDigit, toLower)
+import Data.Maybe (isJust, isNothing)
 import Text.Regex.TDFA ((=~))
 
 -- Import the actual implementation from our library
@@ -82,7 +83,7 @@ main = hspec $ do
               "postgres://user:secretpassword123@localhost:5432/mydb", 
               "AKIA1234567890123456"
               ]
-        all (\s -> GV.classifySecret s /= Nothing) testSecrets `shouldBe` True
+        all (\s -> isJust (GV.classifySecret s)) testSecrets `shouldBe` True
         
       it "should not detect common code patterns" $ do
         -- Test data that should NOT be detected  
@@ -90,4 +91,4 @@ main = hspec $ do
               "MockApiResponseHandler",
               "getUserFromDatabase"
               ]
-        all (\s -> GV.classifySecret s == Nothing) codePatterns `shouldBe` True
+        all (\s -> isNothing (GV.classifySecret s)) codePatterns `shouldBe` True

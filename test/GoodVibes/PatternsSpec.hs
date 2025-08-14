@@ -119,4 +119,4 @@ isPrivateKeyPattern text = "-----BEGIN" `elem` words text &&
                           ("PRIVATE KEY" `elem` words text || "RSA PRIVATE KEY" `elem` words text || "EC PRIVATE KEY" `elem` words text)
 
 (=~) :: String -> String -> Bool
-text =~ pattern = pattern `elem` [text]  -- Simplified for testing
+text =~ pat = pat `elem` [text]  -- Simplified for testing
