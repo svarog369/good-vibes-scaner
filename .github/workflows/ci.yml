@@ -99,7 +99,7 @@ jobs:
     - name: 🛡️ Install modern cabal-audit (security vibes tool)
       run: |
         # Download the latest static executable
-        curl -L -o cabal-audit https://github.com/MangoIV/cabal-audit/releases/download/nightly/cabal-audit-x86_64-linux
+        curl -L -o cabal-audit https://github.com/MangoIV/cabal-audit/releases/download/nightly/cabal-audit
         chmod +x cabal-audit
         sudo mv cabal-audit /usr/local/bin/
       
