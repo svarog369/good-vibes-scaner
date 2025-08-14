@@ -22,19 +22,58 @@ Good Vibes Scaner is a chill yet powerful security tool that vibes through your 
 
 ## 🚀 Quick Start (Keep Those Vibes Flowing)
 
-### Installation
+### Installation Options
 
+#### Option 1: Install Globally (Recommended for daily use)
 ```bash
 # Clone the good vibes
 git clone https://github.com/svarog369/good-vibes-scaner.git
 cd good-vibes-scaner
 
-# Build with good vibes
+# Install to ~/.cabal/bin (make sure it's in your PATH)
+cabal install --install-method=copy --installdir=~/.cabal/bin
+
+# Or install to /usr/local/bin (requires sudo)
+cabal install --install-method=copy --installdir=/usr/local/bin
+
+# Add ~/.cabal/bin to PATH if not already (add to ~/.bashrc or ~/.zshrc)
+export PATH="$HOME/.cabal/bin:$PATH"
+```
+
+#### Option 2: Run from Source (Development)
+```bash
+# Clone and build
+git clone https://github.com/svarog369/good-vibes-scaner.git
+cd good-vibes-scaner
 cabal build
 
-# Install for system-wide good vibes
-cabal install
+# Run directly with cabal
+cabal run good-vibes-scaner -- --current-only
 ```
+
+#### Option 3: Copy Binary Manually
+```bash
+# After building, find and copy the binary
+cabal build
+find dist-newstyle -name "good-vibes-scaner" -type f -executable
+# Copy the found binary to your preferred bin directory
+cp /path/to/binary ~/.local/bin/good-vibes-scaner  # or /usr/local/bin/
+```
+
+### Verify Installation
+
+```bash
+# Check if the tool is in your PATH
+which good-vibes-scaner
+
+# Test the installation
+good-vibes-scaner --help
+```
+
+**Troubleshooting**: If you get "command not found":
+1. Make sure `~/.cabal/bin` is in your PATH: `echo $PATH | grep cabal`
+2. Or run: `export PATH="$HOME/.cabal/bin:$PATH"`
+3. Add the export line to your shell config file (`~/.bashrc`, `~/.zshrc`, etc.)
 
 ### Basic Usage
 
