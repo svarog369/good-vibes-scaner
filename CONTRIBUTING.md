@@ -43,7 +43,7 @@ Enhancement suggestions are welcome! Please include:
 
 ```bash
 # Clone the good vibes
-git clone https://github.com/yourusername/good-vibes-scaner.git
+git clone https://github.com/svarog369/good-vibes-scaner.git
 cd good-vibes-scaner
 
 # Install dependencies
@@ -165,8 +165,8 @@ For maintainers releasing new versions:
 
 ## 💬 Getting Help (When You Need Some Vibes)
 
-- 💭 Start a [Discussion](https://github.com/yourusername/good-vibes-scaner/discussions) for questions
-- 🐛 Create an [Issue](https://github.com/yourusername/good-vibes-scaner/issues) for bugs
+- 💭 Start a [Discussion](https://github.com/svarog369/good-vibes-scaner/discussions) for questions
+- 🐛 Create an [Issue](https://github.com/svarog369/good-vibes-scaner/issues) for bugs
 - 💡 Join our community chat (link coming soon!)
 - 📧 Email the maintainers for private concerns
 

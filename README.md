@@ -4,7 +4,7 @@
 
 ![Haskell](https://img.shields.io/badge/Haskell-5e5086?style=for-the-badge&logo=haskell&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
-![Build Status](https://img.shields.io/github/actions/workflow/status/yourusername/good-vibes-scaner/ci.yml?style=for-the-badge)
+![Build Status](https://img.shields.io/github/actions/workflow/status/svarog369/good-vibes-scaner/ci.yml?style=for-the-badge)
 
 ## 🌟 What's This Vibe About?
 
@@ -26,7 +26,7 @@ Good Vibes Scaner is a chill yet powerful security tool that vibes through your 
 
 ```bash
 # Clone the good vibes
-git clone https://github.com/yourusername/good-vibes-scaner.git
+git clone https://github.com/svarog369/good-vibes-scaner.git
 cd good-vibes-scaner
 
 # Build with good vibes
@@ -102,7 +102,7 @@ cabal test --test-options="--match=\"Pattern matching\""
 
 ```bash
 # Clone and enter the vibe zone
-git clone https://github.com/yourusername/good-vibes-scaner.git
+git clone https://github.com/svarog369/good-vibes-scaner.git
 cd good-vibes-scaner
 
 # Install dependencies
@@ -214,9 +214,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Found a bug or have a feature request? We want to keep those vibes flowing smoothly!
 
-- 🐛 [Report bugs](https://github.com/yourusername/good-vibes-scaner/issues/new?template=bug_report.md)
-- 💡 [Request features](https://github.com/yourusername/good-vibes-scaner/issues/new?template=feature_request.md)
-- 💬 [Start discussions](https://github.com/yourusername/good-vibes-scaner/discussions)
+- 🐛 [Report bugs](https://github.com/svarog369/good-vibes-scaner/issues/new?template=bug_report.md)
+- 💡 [Request features](https://github.com/svarog369/good-vibes-scaner/issues/new?template=feature_request.md)
+- 💬 [Start discussions](https://github.com/svarog369/good-vibes-scaner/discussions)
 
 ---
 

@@ -138,7 +138,7 @@ jobs:
     name: 📚 Publish to Hackage
     needs: [create-release, build-binaries]
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'yourusername' # Replace with actual username
+    if: github.repository_owner == 'svarog369'
     
     steps:
     - name: 📥 Checkout code
