@@ -1,36 +1,19 @@
 # HLint Configuration for Good Vibes Scaner ✨
 # Keeping the code quality vibes high! 🚀
 
-- ignore: {name: "Use camelCase"}  # We like our good vibes naming
-- ignore: {name: "Redundant bracket"}  # Sometimes brackets make vibes clearer
-- ignore: {name: "Unused LANGUAGE pragma"}  # We might need those pragmas for good vibes
+# Basic ignores for good vibes
+- ignore: {name: "Use camelCase"}
+- ignore: {name: "Redundant bracket"} 
+- ignore: {name: "Unused LANGUAGE pragma"}
+- ignore: {name: "Use newtype instead of data"}
+- ignore: {name: "Use String instead of [Char]"}
 
-# Encourage good vibes patterns
-- warn: {lhs: "map f (map g xs)", rhs: "map (f . g) xs", name: "Use composition for better vibes"}
-- warn: {lhs: "concat (map f xs)", rhs: "concatMap f xs", name: "ConcatMap brings better vibes"}
+# Encourage good patterns
+- warn: {lhs: "map f (map g xs)", rhs: "map (f . g) xs"}
+- warn: {lhs: "concat (map f xs)", rhs: "concatMap f xs"}
+- warn: {lhs: "putStrLn (show x)", rhs: "print x"}
+- hint: {lhs: "length xs > 0", rhs: "not (null xs)"}
 
-# Discourage bad vibes patterns  
-- error: {lhs: "head xs", rhs: "listToMaybe xs", name: "Head can crash the vibes - use listToMaybe"}
-- error: {lhs: "tail xs", rhs: "drop 1 xs", name: "Tail can crash the vibes - use drop"}
-
-# Custom rules for our good vibes codebase
-- group:
-    name: "good-vibes-specific"
-    enabled: true
-    rules:
-      - warn: {lhs: "putStrLn (show x)", rhs: "print x", name: "Print keeps the output vibes simple"}
-      - hint: {lhs: "length xs > 0", rhs: "not (null xs)", name: "Null check has better vibes"}
-      
-# File-specific settings
-- modules:
-    - {name: [GoodVibes.Types], ignore: [Use newtype instead of data]}
-    - {name: [GoodVibes.Patterns], ignore: [Use String instead of [Char]]}
-
-# Good vibes extensions we allow
-- extensions:
-    - OverloadedStrings
-    - ScopedTypeVariables 
-    - LambdaCase
-    
-# Keep warnings friendly with good vibes
-- severity: suggestion
+# Discourage dangerous patterns  
+- error: {lhs: "head xs", rhs: "listToMaybe xs"}
+- error: {lhs: "tail xs", rhs: "drop 1 xs"}
