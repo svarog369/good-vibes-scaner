@@ -153,7 +153,7 @@ jobs:
         
     - name: 📦 Build release binary (preparing good vibes for release)
       run: |
-        cabal configure --enable-optimization=2
+        cabal configure --enable-optimization=2 --ghc-options="-O2"
         cabal build
         
     - name: 📋 Package check (verifying release vibes)

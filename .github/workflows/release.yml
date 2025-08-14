@@ -101,7 +101,7 @@ jobs:
       
     - name: 🏗️ Build release binary
       run: |
-        cabal configure --enable-optimization=2 --enable-executable-stripping
+        cabal configure --enable-optimization=2 --enable-executable-stripping --ghc-options="-O2"
         cabal build exe:good-vibes-scaner
         
     - name: 📋 Locate binary (Linux/macOS)
